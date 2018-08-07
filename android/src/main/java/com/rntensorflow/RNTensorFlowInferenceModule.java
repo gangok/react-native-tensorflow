@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.tensorflow.types.UInt8;
+
 import static com.rntensorflow.converter.ArrayConverter.*;
 
 public class RNTensorFlowInferenceModule extends ReactContextBaseJavaModule {
@@ -85,14 +87,14 @@ public class RNTensorFlowInferenceModule extends ReactContextBaseJavaModule {
         double[] srcData = readableArrayToDoubleArray(data.getArray("data"));
         inference.feed(inputName, Tensor.create(shape, DoubleBuffer.wrap(srcData)));
       } else if(dtype == DataType.UINT8) {
-        int[] srcData = readableArrayToIntArray(data.getArray("data"));
-        inference.feed(inputName, Tensor.create(shape, IntBuffer.wrap(srcData)));
+        byte[] srcData = readableArrayToByteUInt8Array(data.getArray("data"));
+        inference.feed(inputName, Tensor.create(UInt8.class, shape, ByteBuffer.wrap(srcData)));
       } else if(dtype == DataType.BOOL) {
         byte[] srcData = readableArrayToByteBoolArray(data.getArray("data"));
-        inference.feed(inputName, Tensor.create(dtype, shape, ByteBuffer.wrap(srcData)));
+        inference.feed(inputName, Tensor.create(Boolean.class, shape, ByteBuffer.wrap(srcData)));
       } else if(dtype == DataType.STRING) {
         byte[] srcData = readableArrayToByteStringArray(data.getArray("data"));
-        inference.feed(inputName, Tensor.create(dtype, shape, ByteBuffer.wrap(srcData)));
+        inference.feed(inputName, Tensor.create(String.class, shape, ByteBuffer.wrap(srcData)));
       } else {
         promise.reject(new IllegalArgumentException("Data type is not supported"));
         return;

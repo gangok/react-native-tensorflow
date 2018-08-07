@@ -83,6 +83,15 @@ public class ArrayConverter {
         return bytesArr;
     }
 
+    public static byte[] readableArrayToByteUInt8Array(ReadableArray readableArray) {
+        byte[] bytesArr = new byte[readableArray.size()];
+        for (int i = 0; i < readableArray.size(); i++) {
+            bytesArr[i] = (byte) (readableArray.getInt(i) & 0xFF);
+        }
+
+        return bytesArr;
+    }
+
     public static ReadableArray doubleArrayToReadableArray(double[] arr) {
         WritableArray writableArray = new WritableNativeArray();
         for (double d : arr) {
